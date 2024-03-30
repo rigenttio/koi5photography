@@ -31,9 +31,11 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Branch::observe(BranchObserver::class);
-        Category::observe(CategoryObserver::class);
-        SubCategory::observe(SubCategoryObserver::class);
+        if (env('CACHE_DRIVER') == 'redis') {
+            Branch::observe(BranchObserver::class);
+            Category::observe(CategoryObserver::class);
+            SubCategory::observe(SubCategoryObserver::class);
+        }
     }
 
     /**

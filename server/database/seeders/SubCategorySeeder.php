@@ -13,10 +13,37 @@ class SubCategorySeeder extends Seeder
      */
     public function run(): void
     {
-        SubCategory::create(['name' => 'subcategori 1']);
-        SubCategory::create(['name' => 'subcategori 2']);
-        SubCategory::create(['name' => 'subcategori 3']);
-        SubCategory::create(['name' => 'subcategori 4']);
-        SubCategory::create(['name' => 'subcategori 5']);
+        $subCategories = [
+            'Audio Device',
+            'Video Transmitter Wireless',
+            'Video Capture Device | Switcher | Mixer',
+            'Kabel',
+            'TV | Monitor | Stand TV | Mixer',
+            'Stabilizer',
+            'Other Equipment',
+            'Projector & Screen',
+            'Kamera Mirrorless',
+            'Lensa Sony',
+            'Lensa Samyang Sony (Cine lens)',
+            'Lensa Samyang Sony (Auto Focus)',
+            'Lensa Sigma Sony',
+            'Lensa Tamron Sony',
+            'Kamera',
+            'Lensa Canon',
+            'Lensa Canon Mirrorless RF',
+            'Lensa Samyang Canon (Cine Lens)',
+            'Lensa Sigma Canon',
+            'Lensa Fujifilm',
+            'Lensa Nikon',
+            'LED',
+            'Lampu Flash Set',
+            'Flash',
+            'Trigger, Receiver & Flashmeter',
+            'Softbox',
+        ];
+
+        foreach ($subCategories as $subCategory) {
+            SubCategory::create(['name' => $subCategory]);
+        }
     }
 }

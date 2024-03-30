@@ -13,17 +13,25 @@ class CategorySeeder extends Seeder
      */
     public function run(): void
     {
-        Category::create(['name' => 'Asessories']);
-        Category::create(['name' => 'Sony']);
-        Category::create(['name' => 'Cannon']);
-        Category::create(['name' => 'Fujifilm']);
-        Category::create(['name' => 'Nikon']);
-        Category::create(['name' => 'Camera Video & Action Cam']);
-        Category::create(['name' => 'Baterai & Converter']);
-        Category::create(['name' => 'Mmc']);
-        Category::create(['name' => 'Lighting']);
-        Category::create(['name' => 'Tripod $ Stand']);
-        Category::create(['name' => 'Photobooth']);
-        Category::create(['name' => 'Studio']);
+        $categories = [
+            'Accessories',
+            'Sony',
+            'Canon',
+            'Fujifilm',
+            'Nikon',
+            'Kamera Video & Action Cam',
+            'Baterai & Converter',
+            'MMC',
+            'Lighting',
+            'Tripod & Stand',
+            'Photobooth',
+            'Studio Foto',
+            'Fuji',
+            'Lumix',
+        ];
+
+        foreach ($categories as $category) {
+            Category::firstOrCreate(['name' => $category]);
+        }
     }
 }

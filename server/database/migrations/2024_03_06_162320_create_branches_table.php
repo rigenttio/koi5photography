@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('name')->nullable();
             $table->string('slug')->nullable();
+            $table->string('address')->nullable();
+            $table->string('googlemap_url')->nullable();
             $table->timestamps();
         });
     }
