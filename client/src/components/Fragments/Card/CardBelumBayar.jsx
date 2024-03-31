@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import Button from "../../Elements/Button/Button";
 import { FormatRupiah } from "@arismun/format-rupiah";
 import { env } from "../../../lib/env";
+import { FormatDate } from "../../../lib/FormatDate";
 
 const CardBelumBayar = (props) => {
   const { onClick, order } = props;
@@ -36,7 +37,9 @@ const CardBelumBayar = (props) => {
             </div>
             <div className="flex">
               <span className="min-w-[105px] text-xs text-neutral-400">Bayar Sebelum</span>
-              <span className="text-xs">{order.exp_pay}</span>
+              <span className="text-xs">
+                <FormatDate value={order.exp_pay} />
+              </span>
             </div>
             <div className="flex">
               <span className="min-w-[105px] text-xs text-neutral-400">Alamat Toko</span>

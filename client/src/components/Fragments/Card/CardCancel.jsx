@@ -2,6 +2,7 @@ import { FormatRupiah } from "@arismun/format-rupiah";
 import React from "react";
 import { Link } from "react-router-dom";
 import { env } from "../../../lib/env";
+import { FormatDate } from "../../../lib/FormatDate";
 
 const CardCancel = (props) => {
   const { order } = props;
@@ -35,7 +36,9 @@ const CardCancel = (props) => {
             </div>
             <div className="flex">
               <span className="min-w-[145px] text-xs text-neutral-400">Dibatalkan Tanggal</span>
-              <span className="text-xs">{order.cancel_at}</span>
+              <span className="text-xs">
+                <FormatDate value={order.cancel_at} />
+              </span>
             </div>
             <div className="flex">
               <span className="min-w-[145px] text-xs text-neutral-400">Alamat Toko</span>

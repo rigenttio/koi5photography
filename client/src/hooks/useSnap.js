@@ -26,6 +26,7 @@ export const useSnap = () => {
   const handleSnapPay = (token_snap, action) => {
     if (snap) {
       snap.pay(token_snap, {
+        uiMode: "deeplink",
         onSuccess: function (result) {
           action.onSuccess(result);
         },

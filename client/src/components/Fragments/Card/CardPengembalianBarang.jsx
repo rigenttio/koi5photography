@@ -2,6 +2,7 @@ import { FormatRupiah } from "@arismun/format-rupiah";
 import React from "react";
 import { Link } from "react-router-dom";
 import { env } from "../../../lib/env";
+import { FormatDate } from "../../../lib/FormatDate";
 
 const CardPengembalianBarang = (props) => {
   const { order } = props;
@@ -35,7 +36,9 @@ const CardPengembalianBarang = (props) => {
             </div>
             <div className="flex">
               <span className="min-w-[145px] text-xs text-neutral-400">Kembalikan Sebelum</span>
-              <span className="text-xs">{order.exp_rent}</span>
+              <span className="text-xs">
+                <FormatDate value={order.exp_rent} />
+              </span>
             </div>
             <div className="flex">
               <span className="min-w-[145px] text-xs text-neutral-400">Alamat Toko</span>
