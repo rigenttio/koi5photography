@@ -61,6 +61,10 @@ class OrderController extends Controller
                 "finish" => env('APP_URL_CLIENT') . "/purchase",
                 "error" => env('APP_URL_CLIENT') . "/purchase",
                 "pending" => env('APP_URL_CLIENT') . "/purchase"
+            ),
+            "expiry" => array(
+                "unit" => "hour",
+                "duration" => 24
             )
         );
 

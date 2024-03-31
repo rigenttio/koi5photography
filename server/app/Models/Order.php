@@ -15,12 +15,19 @@ class Order extends Model
     protected $guarded = ['id'];
     public $incrementing = false;
     protected $keyType = 'string';
+    protected $casts = [
+        'exp_pay' => 'datetime:Y-m-d\TH:i:s.u\Z',
+        'exp_take' => 'datetime:Y-m-d\TH:i:s.u\Z',
+        'exp_rent' => 'datetime:Y-m-d\TH:i:s.u\Z',
+        'done_at' => 'datetime:Y-m-d\TH:i:s.u\Z',
+        'cancel_at' => 'datetime:Y-m-d\TH:i:s.u\Z',
+    ];
 
     public static function boot()
     {
         parent::boot();
         static::creating(function ($self) {
-            $self->id = generateUuid(12, 'TX', 'orders');
+            $self->id = generateUuid(12, 'invoice-', 'orders');
         });
     }
 

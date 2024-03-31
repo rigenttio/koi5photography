@@ -35,7 +35,7 @@ class PasswordController extends Controller
         ResetPassword::create([
             'email' => $user->email,
             'token' => hash('sha256', $token),
-            'token_exp' => Carbon::now()->addMinutes(5),
+            'token_exp' => Carbon::now()->addMinutes(10),
         ]);
 
         try {
