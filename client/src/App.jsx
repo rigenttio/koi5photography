@@ -18,6 +18,7 @@ import ForgotPasswordPage from "./pages/forgotPassword";
 import { ScrollToTop } from "./lib/ScrollToTop";
 import ResetPasswordPage from "./pages/resetPassword";
 import ContactPage from "./pages/contact";
+import ChangePasswordPage from "./pages/changePassword";
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
               <Route path="/purchase" element={<PurchasePage />} />
               <Route path="/bookmark" element={<BookmarkPage />} />
               <Route path="/profile" element={<ProfilePage />} />
+              <Route path="/profile/change-password" element={<ChangePasswordPage />} />
             </Route>
             <Route path="/" element={<BerandaPage />} />
             <Route path="/about" element={<BerandaPage />} />
