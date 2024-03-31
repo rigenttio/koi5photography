@@ -94,4 +94,37 @@ class PasswordController extends Controller
             ], 400);
         }
     }
+
+    public function changePassword(Request $request)
+    {
+        $validator = validator($request->all(), [
+            'old_password' => 'required',
+            'password' => 'required',
+        ], [
+            'required' => 'Tidak boleh kosong',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'errorType' => 'validation',
+                'message' => $validator->errors()
+            ], 422);
+        }
+
+        $user = User::findOrFail(auth()->id());
+        if (Hash::check($request->old_password, $user->password)) {
+            $user->update(["password" => Hash::make($request->password)]);
+            return response()->json([
+                'status' => true,
+                'message' => "berhasil update password"
+            ], 200);
+        } else {
+            return response()->json([
+                'status' => true,
+                'errorType' => "oldPassword",
+                'message' => "Password lama salah"
+            ], 400);
+        }
+    }
 }

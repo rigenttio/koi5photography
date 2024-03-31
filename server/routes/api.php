@@ -45,7 +45,6 @@ Route::post('/contact', [ContactController::class, 'sendContact']);
 
 Route::post('/webhooks/midtrans', [OrderController::class, 'webhook']);
 
-
 Route::get('/product/{productSlug}', [ProductController::class, 'show']);
 Route::get('/product/get_by_branch/{branchSlug}', [ProductController::class, 'getByBranch']);
 Route::get('/product/get_by_category/{branchSlug}/{categorySlug}', [ProductController::class, 'getByCategory']);
@@ -54,6 +53,8 @@ Route::get('/product/get_by_subcategory/{branchSlug}/{categorySlug}/{subCategory
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/me', [AuthController::class, 'me']);
+    Route::patch('/change-password', [PasswordController::class, 'changePassword']);
+
 
     Route::post('/order', [OrderController::class, 'store']);
     Route::get('/order/no_paid', [OrderController::class, 'getOrderNoPaid']);
