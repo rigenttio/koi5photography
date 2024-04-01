@@ -11,8 +11,8 @@ const ForgotPasswordPage = () => {
     <>
       <Navbar />
 
-      <div className="grid grid-cols-2 my-[72px] container">
-        <div>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 my-[72px] container">
+        <div className="order-2 lg:order-1">
           <form onSubmit={handleForgotPassword}>
             <div className="flex flex-col gap-12 bg-gray py-12 px-8 rounded-xl">
               <div className="flex flex-col gap-3">
@@ -29,7 +29,7 @@ const ForgotPasswordPage = () => {
             </div>
           </form>
         </div>
-        <div className="flex justify-center items-center">
+        <div className="order-1 lg:order-2 flex justify-center items-center">
           <div>
             <img src="/assets/img/hero-forgot-password.svg" alt="" />
           </div>

@@ -11,7 +11,7 @@ const NavTab = () => {
 
   return (
     <div>
-      <div className="flex justify-center mt-6 overflow-x-auto">
+      <div className="flex lg:justify-center mt-6 overflow-x-auto">
         <NavTabItem isActive={activeItems === "Belum Bayar"} label="Belum Bayar" onClick={() => setActiveItems("Belum Bayar")} />
         <NavTabItem isActive={activeItems === "Pengambilan Barang"} label="Pengambilan Barang" onClick={() => setActiveItems("Pengambilan Barang")} />
         <NavTabItem isActive={activeItems === "Pengembalian Barang"} label="Pengembalian Barang" onClick={() => setActiveItems("Pengembalian Barang")} />

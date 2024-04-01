@@ -99,9 +99,9 @@ const ProductPage = () => {
       {isLoading ? (
         <LoadingPurchase />
       ) : (
-        <div className="grid grid-cols-2 container mt-16">
-          <div>
-            <img src={product && `${env("VITE_IMAGE_BASE_URL")}/products/${product.thumbnail}`} alt="" className="object-contain h-[500px] rounded-lg w-[500px] bg-gray" />
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 container mt-16">
+          <div className="flex justify-center lg:justify-start">
+            <img src={product && `${env("VITE_IMAGE_BASE_URL")}/products/${product.thumbnail}`} alt="" className="object-contain rounded-lg md:h-[500px] md:w-[500px] bg-gray" />
           </div>
           <div className="flex flex-col">
             <div className="flex gap-3 justify-between">
@@ -160,7 +160,7 @@ const ProductPage = () => {
               </div>
             </div>
 
-            <div className="flex justify-between items-center mt-4">
+            <div className="flex flex-col gap-4 justify-start sm:flex-row sm:justify-between items-center mt-4">
               <div className="flex">
                 <p className="min-w-[105px] text-lg font-semibold">Total</p>
                 <p className="text-lg font-semibold">{product && <FormatRupiah value={total} />}</p>

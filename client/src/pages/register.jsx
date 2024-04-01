@@ -14,11 +14,11 @@ const RegisterPage = () => {
     <>
       <Navbar />
 
-      <div className="grid grid-cols-2 my-[72px] container">
-        <div className="flex justify-center items-center">
+      <div className="grid grid-cols-1 lg:grid-cols-2 my-[72px] container">
+        <div className="order-2 lg:order-1 flex justify-center items-center">
           <img src="/assets/img/hero-register.svg" alt="hero" />
         </div>
-        <div className="px-3">
+        <div className="order-1 lg:order-2 px-3">
           <form onSubmit={handleRegister}>
             <div className="flex flex-col gap-12 bg-gray py-12 px-8 rounded-xl">
               <div className="flex flex-col gap-3">

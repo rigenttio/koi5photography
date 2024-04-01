@@ -15,7 +15,7 @@ const ContactPage = () => {
         <h2 className="text-4xl font-bold text-center mb-2">Punya Pertanyaan?</h2>
         <p className="text-sm font-medium text-center mb-6">Jika kamu memiliki masalah dan pertanyaan seputar Koi5 Photography silakan mengisi form dibawah ini.</p>
         <form onSubmit={handleContact}>
-          <div className="flex flex-col gap-6 py-16 px-28 bg-gray w-3/4 mx-auto rounded-3xl">
+          <div className="flex flex-col gap-6 py-16 px-8 lg:px-28 bg-gray w-full lg:w-3/4 mx-auto rounded-3xl">
             <Input value={email} onChange={(e) => setEmail(e.target.value)} type="text" placeholder="Email" />
             {errorEmail && <p className="-mt-4 font-normal text-xs text-red-500">{errorEmail}</p>}
             <Input value={subject} onChange={(e) => setSubject(e.target.value)} type="text" placeholder="Subject" />

@@ -109,7 +109,7 @@ const BerandaPage = () => {
             <h1 className="font-extrabold text-4xl text-center lg:text-start">Siap mengabadikan momen Anda?</h1>
             <span className="font-normal text-2xl text-center lg:text-start">Kami menyediakan peralatan yang anda butuhkan</span>
             <div className="flex justify-center lg:justify-start">
-              <ButtonLink to="/login">Sewa Sekarang</ButtonLink>
+              <ButtonLink to="/register">Daftar Akun</ButtonLink>
             </div>
           </div>
         </div>

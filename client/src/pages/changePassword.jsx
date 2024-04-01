@@ -18,7 +18,7 @@ const ChangePasswordPage = () => {
         <p className="font-semibold mb-1">Ubah Kata Sandi</p>
         <p className="text-xs mb-6">Kelola informasi profil Anda untuk mengontrol, melindungi dan mengamankan akun</p>
         <form onSubmit={handleChangePassword}>
-          <div className="flex gap-6">
+          <div className="flex flex-col-reverse lg:flex-row gap-6">
             <div className="flex flex-col w-full gap-6">
               <InputForm value={oldPassword} onChange={(e) => setOldPassword(e.target.value)} image="/assets/icons/password-input.svg" type="password" placeholder="Password Lama" />
               {errorOldPassword && <p className="-mt-4 font-normal text-xs text-red-500">{errorOldPassword}</p>}

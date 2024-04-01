@@ -7,7 +7,7 @@ const SidebarBranchLayout = (props) => {
   return (
     <>
       <Navbar />
-      <div className="flex">
+      <div className="flex flex-col md:flex-row">
         <SidebarBranch />
         <main className="flex-1 h-[84vh] overflow-y-auto">{children}</main>
       </div>

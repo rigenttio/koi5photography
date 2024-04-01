@@ -11,9 +11,9 @@ const Button = (props) => {
       disabled={disabled}
       type={type}
       onClick={onClick}
-      className={`py-2 px-6 text-white text-lg font-medium bg-primary hover:bg-[#c70e1d] duration-300 rounded-[96px] 
-    disabled:opacity-20
-    ${disabled ? "" : "hover:scale-105"}`}
+      className={`py-2 px-6 text-white text-lg font-medium bg-primary  duration-300 rounded-[96px] 
+    disabled:opacity-20 disabled:cursor-not-allowed
+    ${disabled ? "" : "hover:scale-105 hover:bg-[#c70e1d]"}`}
     >
       {children}
     </button>

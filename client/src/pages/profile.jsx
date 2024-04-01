@@ -26,7 +26,7 @@ const ProfilePage = () => {
         <p className="font-semibold mb-1">Profil saya</p>
         <p className="text-xs mb-6">Kelola informasi profil Anda untuk mengontrol, melindungi dan mengamankan akun</p>
         <form onSubmit={handleUpdateProfile} encType="multipart/form-data">
-          <div className="flex gap-6">
+          <div className="flex flex-col-reverse lg:flex-row gap-6">
             <div className="flex flex-col w-full gap-6">
               <div className="flex gap-6">
                 <div className="flex flex-col w-full gap-6">

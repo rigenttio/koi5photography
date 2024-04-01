@@ -56,23 +56,23 @@ const BranchPage = () => {
 
   return (
     <SidebarBranchLayout>
-      <div className="m-16">
+      <div className="mx-4 my-16 pt-7 md:pt-0 md:m-16">
         {/* filter */}
-        <div className="bg-gray mb-6 py-3 px-3 flex justify-between items-center">
-          <select className="bg-gray py-2 px-3 rounded-lg focus:ring-primary focus:border-primary block">
+        <div className=" bg-gray mb-6 py-3 px-3 flex flex-wrap gap-6 justify-center md:justify-between items-center">
+          <select defaultValue="" className="order-2 md:order-1 bg-gray py-2 px-3 border border-white/20 rounded-lg focus:ring-primary focus:border-primary block">
             <option value="" disabled>
               Harga
             </option>
             <option value="asc">Rendah ke Tinggi</option>
-            <option value="dsc">Tinggi ke Rendah</option>
+            <option value="desc">Tinggi ke Rendah</option>
           </select>
 
-          <div className="relative">
+          <div className="relative order-1 md:order-2 mt-4 sm:mt-0">
             <input className="bg-white text-dark py-2 px-3 rounded-lg pl-11" type="text" placeholder="Search" />
             <i className="absolute fa-solid text-dark fa-magnifying-glass left-3 top-1/2 -translate-y-1/2"></i>
           </div>
         </div>
-        <div className="grid grid-cols-3 gap-6 ">
+        <div className="grid md:grid-cols-1 lg:grid-cols-3 gap-6 ">
           {isLoading ? (
             <CardSkeleton count={3} />
           ) : products.length > 0 ? (
