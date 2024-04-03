@@ -44,5 +44,7 @@ class ProductSeeder extends Seeder
             'price' => 300000,
             'is_stock' => true
         ]);
+
+        Product::factory(50)->create();
     }
 }

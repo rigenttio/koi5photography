@@ -9,10 +9,12 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-    public function getByBranch($branchSlug)
+    public function getByBranch(Request $request, $branchSlug)
     {
+        $perPage = $request->input('perPage');
+
         $branch = Branch::where('slug', $branchSlug)->firstOrFail();
-        $product = $branch->product()->with('branch')->get();
+        $product = $branch->product()->with('branch')->paginate($perPage);
 
         return response()->json([
             'status' => true,
@@ -20,15 +22,17 @@ class ProductController extends Controller
         ], 200);
     }
 
-    public function getByCategory($branchSlug, $categorySlug)
+    public function getByCategory(Request $request, $branchSlug, $categorySlug)
     {
+        $perPage = $request->input('perPage');
+
         $branch = Branch::where('slug', $branchSlug)->firstOrFail();
         $product = $branch->product()
             ->whereHas('category', function ($query) use ($categorySlug) {
                 $query->where('slug', $categorySlug);
             })
             ->with('branch')
-            ->get();
+            ->paginate($perPage);
 
         return response()->json([
             'status' => true,
@@ -36,8 +40,10 @@ class ProductController extends Controller
         ], 200);
     }
 
-    public function getBySubCategory($branchSlug, $categorySlug, $subCategorySlug)
+    public function getBySubCategory(Request $request, $branchSlug, $categorySlug, $subCategorySlug)
     {
+        $perPage = $request->input('perPage');
+
         $branch = Branch::where('slug', $branchSlug)->firstOrFail();
         $product = $branch->product()
             ->whereHas('category', function ($query) use ($categorySlug) {
@@ -47,7 +53,7 @@ class ProductController extends Controller
                 $query->where('slug', $subCategorySlug);
             })
             ->with('branch')
-            ->get();
+            ->paginate($perPage);
 
         return response()->json([
             'status' => true,
