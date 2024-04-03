@@ -106,56 +106,6 @@ const BranchPage = () => {
     return userBookmarks.some((bookmark) => bookmark.pivot.product_id === productId);
   };
 
-  // useEffect(() => {
-  //   const controller = new AbortController();
-  //   const { signal } = controller;
-
-  //   setPage(1);
-  //   setProducts([]);
-  //   setHasNextPage(true);
-
-  //   const fetchData = async () => {
-  //     setIsLoading(true);
-  //     try {
-  //       if (branchSlug && categorySlug && subCategorySlug) {
-  //         const response = await axiosInstance.get(`/product/get_by_subcategory/${branchSlug}/${categorySlug}/${subCategorySlug}?page=${page}&perPage=10`, { signal });
-  //         setHasNextPage(response.data.data.next_page_url !== null);
-  //         setProducts((prevProducts) => {
-  //           return [...new Set([...prevProducts, ...response.data.data.data])];
-  //         });
-  //       } else if (branchSlug && categorySlug) {
-  //         const response = await axiosInstance.get(`/product/get_by_category/${branchSlug}/${categorySlug}?page=${page}&perPage=10`, { signal });
-  //         setHasNextPage(response.data.data.next_page_url !== null);
-  //         setProducts((prevProducts) => {
-  //           return [...new Set([...prevProducts, ...response.data.data.data])];
-  //         });
-  //       } else if (branchSlug) {
-  //         const response = await axiosInstance.get(`/product/get_by_branch/${branchSlug}?page=${page}&perPage=10`, { signal });
-  //         setHasNextPage(response.data.data.next_page_url !== null);
-  //         setProducts((prevProducts) => {
-  //           return [...new Set([...prevProducts, ...response.data.data.data])];
-  //         });
-  //       }
-
-  //       if (isLoggedIn) {
-  //         const response = await axiosInstance.get("/bookmark", {
-  //           headers: {
-  //             Authorization: `Bearer ${cookie.get("access_token")}`,
-  //           },
-  //         });
-  //         setUserBookmarks(response.data.data);
-  //       }
-  //       setIsLoading(false);
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   };
-
-  //   fetchData(signal);
-
-  //   return () => controller.abort();
-  // }, [branchSlug, categorySlug, subCategorySlug, isLoggedIn]);
-
   return (
     <SidebarBranchLayout>
       <div className="mx-4 my-16 pt-7 md:pt-0 md:m-16">
