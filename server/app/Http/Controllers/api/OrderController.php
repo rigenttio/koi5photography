@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Redis;
 
 class OrderController extends Controller
 {
@@ -88,15 +89,17 @@ class OrderController extends Controller
         ], 200);
     }
 
-    public function getOrderNoPaid()
+    public function getOrderNoPaid(Request $request)
     {
+        $perPage = $request->input('perPage');
+
         $user = User::findOrFail(auth()->id());
 
         $order = $user->order()
             ->with('product.branch')
             ->where('status', 'belum bayar')
             ->orderBy('created_at', 'desc')
-            ->get();
+            ->paginate($perPage);
 
         return response()->json([
             'status' => true,
@@ -104,15 +107,17 @@ class OrderController extends Controller
         ], 200);
     }
 
-    public function getOrderPaid()
+    public function getOrderPaid(Request $request)
     {
+        $perPage = $request->input('perPage');
+
         $user = User::findOrFail(auth()->id());
 
         $order = $user->order()
             ->with('product.branch')
             ->where('status', 'dibayar')
             ->orderBy('created_at', 'desc')
-            ->get();
+            ->paginate($perPage);
 
         return response()->json([
             'status' => true,
@@ -120,15 +125,17 @@ class OrderController extends Controller
         ], 200);
     }
 
-    public function getOrderTake()
+    public function getOrderTake(Request $request)
     {
+        $perPage = $request->input('perPage');
+
         $user = User::findOrFail(auth()->id());
 
         $order = $user->order()
             ->with('product.branch')
             ->where('status', 'diambil')
             ->orderBy('created_at', 'desc')
-            ->get();
+            ->paginate($perPage);
 
         return response()->json([
             'status' => true,
@@ -136,15 +143,17 @@ class OrderController extends Controller
         ], 200);
     }
 
-    public function getOrderDone()
+    public function getOrderDone(Request $request)
     {
+        $perPage = $request->input('perPage');
+
         $user = User::findOrFail(auth()->id());
 
         $order = $user->order()
             ->with('product.branch')
             ->where('status', 'selesai')
             ->orderBy('created_at', 'desc')
-            ->get();
+            ->paginate($perPage);
 
         return response()->json([
             'status' => true,
@@ -152,8 +161,10 @@ class OrderController extends Controller
         ], 200);
     }
 
-    public function getOrderCancel()
+    public function getOrderCancel(Request $request)
     {
+        $perPage = $request->input('perPage');
+
         $user = User::findOrFail(auth()->id());
 
         $order = $user->order()
@@ -161,7 +172,7 @@ class OrderController extends Controller
             ->where('status', 'refund')
             ->orWhere('status', 'dibatalkan')
             ->orderBy('created_at', 'desc')
-            ->get();
+            ->paginate($perPage);
 
         return response()->json([
             'status' => true,
