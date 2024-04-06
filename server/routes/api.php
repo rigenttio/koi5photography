@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\api\AdminAuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\api\AuthController;
@@ -29,6 +30,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::post('/login', [AuthController::class, 'login']);
+Route::post('/admin/login', [AdminAuthController::class, 'login']);
+
 
 Route::post('/register', [RegisterController::class, 'register']);
 Route::patch('/verify-email', [RegisterController::class, 'verifyEmail']);
@@ -68,4 +71,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/bookmark', [BookmarkController::class, 'read']);
     Route::post('/bookmark/{productId}', [BookmarkController::class, 'store']);
     Route::delete('/bookmark/{productId}', [BookmarkController::class, 'destroy']);
+});
+
+//admin route
+Route::middleware('auth:sanctum', 'admin')->group(function () {
+    Route::get('/admin/me', [AdminAuthController::class, 'me']);
+    Route::get('/order/get_by_branch/{branchSlug}', [OrderController::class, 'getOrderByBranch']);
 });

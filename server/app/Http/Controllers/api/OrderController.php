@@ -8,6 +8,7 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use App\Http\Controllers\Controller;
+use App\Models\Branch;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Redis;
 
@@ -177,6 +178,23 @@ class OrderController extends Controller
         return response()->json([
             'status' => true,
             'data' => $order
+        ], 200);
+    }
+
+    public function getOrderByBranch(Request $request, $branchSlug)
+    {
+        $perPage = $request->input('perPage');
+        $branch = Branch::where('slug', $branchSlug)->firstOrFail();
+
+        $orders = Order::whereHas('product', function ($query) use ($branch) {
+            $query->where('branch_id', $branch->id);
+        })->with('product', 'user')
+            ->orderBy('created_at', 'desc')
+            ->paginate($perPage);
+
+        return response()->json([
+            'status' => true,
+            'data' => $orders
         ], 200);
     }
 
