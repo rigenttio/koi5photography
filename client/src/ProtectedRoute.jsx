@@ -3,7 +3,7 @@ import { Outlet, Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "./context/AuthContext";
 
 const ProtectedRoute = () => {
-  const { isLoggedIn, isLoading } = useAuth();
+  const { isLoggedIn } = useAuth();
   const location = useLocation();
 
   return isLoggedIn ? <Outlet /> : <Navigate to="/login" state={{ prevUrl: location.pathname }} />;

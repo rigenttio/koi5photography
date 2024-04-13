@@ -1,29 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { axiosInstance } from "../../../lib/axios";
+import { AppContext } from "../../../context/AppContext";
 
 const DropdownNavbar = (props) => {
   const { children } = props;
   const [isOpenDropdown, setIsOpenDropdown] = useState(false);
-  const [branch, setBranch] = useState();
+  const { branchs } = useContext(AppContext);
   const location = useLocation();
 
   const toggleDropdown = () => {
     setIsOpenDropdown(!isOpenDropdown);
   };
-
-  useEffect(() => {
-    const getBranch = async () => {
-      try {
-        const response = await axiosInstance.get("/branch");
-        setBranch(response.data.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    getBranch();
-  }, []);
 
   return (
     <div>
@@ -34,17 +22,17 @@ const DropdownNavbar = (props) => {
         </div>
         {isOpenDropdown && (
           <div className="lg:absolute min-w-56 bg-gray rounded-lg lg:rounded-3xl py-2 md:py-6 top-10 -left-[30%]">
-            {branch &&
-              branch.map((bran) => (
+            {branchs &&
+              branchs.map((branch) => (
                 <Link
-                  to={`/catalog/${bran.slug}`}
-                  key={bran.id}
+                  to={`/catalog/${branch.slug}`}
+                  key={branch.id}
                   onClick={() => {
                     setIsOpenDropdown(false);
                   }}
-                  className={`md:py-[10px] py-2 px-4 md:px-6 inline-block w-full whitespace-nowrap hover:underline ${location.pathname.includes(bran.slug) && "underline"}`}
+                  className={`md:py-[10px] py-2 px-4 md:px-6 inline-block w-full whitespace-nowrap hover:underline ${location.pathname.includes(branch.slug) && "underline"}`}
                 >
-                  {bran.name}
+                  {branch.name}
                 </Link>
               ))}
           </div>

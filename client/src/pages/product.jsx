@@ -71,14 +71,18 @@ const ProductPage = () => {
             Authorization: `Bearer ${cookie.get("access_token")}`,
           },
         });
-        toast.success("bookmark dihapus!");
+        toast("Produk dihapus dari Bookmark", {
+          icon: "🖇️",
+        });
       } else {
         await axiosInstance.post(`/bookmark/${product.id}`, null, {
           headers: {
             Authorization: `Bearer ${cookie.get("access_token")}`,
           },
         });
-        toast.success("bookmark ditambah!");
+        toast("Produk ditambahkan ke Bookmark", {
+          icon: "🔖",
+        });
       }
       setBookmarked(!bookmarked);
     } catch (error) {

@@ -37,7 +37,9 @@ const BookmarkPage = () => {
       });
 
       setProducts((prevProducts) => prevProducts.filter((product) => product.id !== productId));
-      toast.success("bookmark dihapus!");
+      toast("Produk dihapus dari Bookmark", {
+        icon: "🖇️",
+      });
     } catch (error) {
       console.log(error);
     }
