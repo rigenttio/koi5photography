@@ -11,6 +11,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Branch;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Redis;
+use PhpParser\Node\Stmt\TryCatch;
 
 class OrderController extends Controller
 {
@@ -31,6 +32,13 @@ class OrderController extends Controller
 
         $user = User::findOrFail(auth()->id());
         $product = Product::findOrFail($request->product_id);
+        if (!$product->is_stock) {
+            return response()->json([
+                'status' => false,
+                'message' => 'stock tidak tersedia'
+            ], 400);
+        }
+
         $totalPrice = $request->quantity * $product->price;
 
         $order = Order::create([
@@ -184,11 +192,15 @@ class OrderController extends Controller
     public function getOrderByBranch(Request $request, $branchSlug)
     {
         $perPage = $request->input('perPage');
+        $search = $request->input('search');
         $branch = Branch::where('slug', $branchSlug)->firstOrFail();
 
         $orders = Order::whereHas('product', function ($query) use ($branch) {
             $query->where('branch_id', $branch->id);
-        })->with('product', 'user')
+        })->when($search, function ($query) use ($search) {
+            $query->where('id', $search);
+        })
+            ->with('product', 'user')
             ->orderBy('created_at', 'desc')
             ->paginate($perPage);
 
@@ -196,6 +208,165 @@ class OrderController extends Controller
             'status' => true,
             'data' => $orders
         ], 200);
+    }
+
+    public function read(Request $request)
+    {
+        $perPage = $request->input('perPage');
+
+        $orders = Order::with('product.branch', 'user')
+            ->orderBy('created_at', 'desc')
+            ->paginate($perPage);
+
+        return response()->json([
+            'status' => true,
+            'data' => $orders
+        ], 200);
+    }
+
+    public function markTake($id)
+    {
+        $order = Order::findOrFail($id);
+
+        if ($order->status === "dibayar") {
+            $order->update([
+                'status' => "diambil",
+                'exp_rent' => Carbon::now()->addDays($order->quantity)
+            ]);
+            $order->save();
+
+            return response()->json([
+                'status' => true,
+                'message' => "berhasil tandai diambil"
+            ], 200);
+        } else {
+            return response()->json([
+                'status' => false,
+                'message' => "terjadi kesalahan"
+            ], 400);
+        }
+    }
+
+    public function markDone($id)
+    {
+        $order = Order::findOrFail($id);
+
+        if ($order->status === "diambil") {
+            $order->update([
+                'status' => "selesai",
+                'done_at' => Carbon::now()
+            ]);
+            $order->save();
+
+            return response()->json([
+                'status' => true,
+                'message' => "berhasil tandai selesai"
+            ], 200);
+        } else {
+            return response()->json([
+                'status' => false,
+                'message' => "terjadi kesalahan"
+            ], 400);
+        }
+    }
+
+    public function cancel($id)
+    {
+        $order = Order::findOrFail($id);
+        $authMidtrans = base64_encode(env('MIDTRANS_SERVER_KEY'));
+
+        if ($order->status === "dibatalkan" || $order->status === "refund") {
+            return response()->json([
+                'status' => false,
+                'message' => "terjadi kesalahan"
+            ], 400);
+        }
+
+        $order->update([
+            'status' => "dibatalkan",
+            'cancel_at' => Carbon::now()
+        ]);
+        $order->save();
+
+        return response()->json([
+            'status' => true,
+            'message' => "berhasil dibatalkan"
+        ], 200);
+
+        // if (!$order->transaction_status) {
+        //     $order->update([
+        //         'status' => "dibatalkan",
+        //         'cancel_at' => Carbon::now()
+        //     ]);
+        //     $order->save();
+
+        //     return response()->json([
+        //         'status' => true,
+        //         'message' => "berhasil dibatalkan"
+        //     ], 200);
+        // } elseif ($order->transaction_status == "capture") {
+        //     $response = Http::withHeaders([
+        //         'Accept' => 'application/json',
+        //         'Content-Type' => 'application/json',
+        //         'Authorization' => "Basic $authMidtrans"
+        //     ])->post(env('MIDTRANS_BASE_API_URL') . "/v2/$order->id/cancel");
+        //     if ($response->successful()) {
+        //         return response()->json([
+        //             'status' => true,
+        //             'message' => "berhasil dibatalkan"
+        //         ], 200);
+        //     } else {
+        //         return response()->json([
+        //             'status' => false,
+        //             'message' => "terjadi kesalahan"
+        //         ], 500);
+        //     }
+        // } else {
+        //     return response()->json([
+        //         'status' => false,
+        //         'message' => "terjadi kesalahan"
+        //     ], 400);
+        // }
+    }
+
+    public function refund($id)
+    {
+        $order = Order::findOrFail($id);
+        $authMidtrans = base64_encode(env('MIDTRANS_SERVER_KEY'));
+
+        if ($order->status === "dibatalkan" || $order->status === "refund" || !$order->transaction_status) {
+            return response()->json([
+                'status' => false,
+                'message' => "terjadi kesalahan"
+            ], 400);
+        }
+
+        if ($order->transaction_status === "settlement") {
+            $response = Http::withHeaders([
+                'Content-Type' => 'application/json',
+                'Authorization' => "Basic $authMidtrans"
+            ])->post(env('MIDTRANS_BASE_API_URL') . "/v2/$order->id/refund");
+            if ($response->successful()) {
+                return response()->json([
+                    'status' => true,
+                    'message' => "berhasil refund"
+                ], 200);
+            } else {
+                return response()->json([
+                    'status' => false,
+                    'message' => "terjadi kesalahan"
+                ], 500);
+            }
+            return response()->json([
+                'status' => true,
+                'message' => "berhasil refund"
+            ], 200);
+        } else {
+            return response()->json([
+                'status' => false,
+                'message' => "terjadi kesalahan"
+            ], 400);
+        }
     }
 
     public function webhook(Request $request)

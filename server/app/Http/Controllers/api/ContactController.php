@@ -25,11 +25,7 @@ class ContactController extends Controller
 
         try {
             Mail::to(env('MAIL_USERNAME'))->queue(new ContactEmail($request->subject, $request->message, $request->email));
-            // Mail::raw($request->message, function (Message $message) use ($request) {
-            //     $message->to(env('MAIL_USERNAME'))
-            //         ->subject($request->subject)
-            //         ->from($request->email);
-            // });
+
             return response()->json([
                 'status' => true,
                 'message' => 'Berhasil mengirim'

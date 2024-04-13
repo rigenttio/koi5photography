@@ -28,13 +28,25 @@ class CategoryController extends Controller
         ]);
     }
 
-    public function get()
+    public function categoryBranchId(Request $request)
     {
-        $category = Category::with('subcategories')->get();
+        $branch = Branch::findOrFail($request->branch_id);
+        $categories = $branch->categories()->get();
 
         return response()->json([
             'status' => true,
-            'data' => $category
+            'data' => $categories
+        ]);
+    }
+
+    public function subcategories(Request $request)
+    {
+        $category = Category::findOrFail($request->category_id);
+        $subcategories =  $category->subcategories()->get();
+
+        return response()->json([
+            'status' => true,
+            'data' => $subcategories
         ]);
     }
 }

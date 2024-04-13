@@ -5,7 +5,6 @@ namespace App\Http\Controllers\api;
 use App\Models\Admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\RateLimiter;
 
@@ -80,6 +79,20 @@ class AdminAuthController extends Controller
         return response()->json([
             'status' => true,
             'data' => $admin
+        ], 200);
+    }
+
+    public function logout()
+    {
+        $admin = Admin::findOrFail(auth()->id());
+
+        if ($admin) {
+            $admin->tokens()->delete();
+        }
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Berhasil logout',
         ], 200);
     }
 }
