@@ -1,4 +1,3 @@
-import React from "react";
 import Navbar from "../components/Fragments/NavBar";
 import Button from "../components/Elements/Button/Button";
 import InputForm from "../components/Elements/Input";

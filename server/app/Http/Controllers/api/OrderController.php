@@ -146,6 +146,19 @@ class OrderController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate($perPage);
 
+        $order->getCollection()->transform(function ($order) {
+            $now = Carbon::now();
+            $expTake = Carbon::parse($order->exp_take);
+            $denda = 0;
+
+            if ($now->greaterThan($expTake)) {
+                $hoursLate = $now->diffInHours($expTake);
+                $denda = $hoursLate * ($order->total_price * 0.10);
+            }
+            $order->denda = $denda;
+            return $order;
+        });
+
         return response()->json([
             'status' => true,
             'data' => $order
@@ -203,6 +216,19 @@ class OrderController extends Controller
             ->with('product', 'user')
             ->orderBy('created_at', 'desc')
             ->paginate($perPage);
+
+        $orders->getCollection()->transform(function ($order) {
+            $now = Carbon::now();
+            $expTake = Carbon::parse($order->exp_take);
+            $denda = 0;
+
+            if ($now->greaterThan($expTake) && $order->status == "diambil") {
+                $hoursLate = $now->diffInHours($expTake);
+                $denda = $hoursLate * ($order->total_price * 0.10);
+            }
+            $order->denda = $denda;
+            return $order;
+        });
 
         return response()->json([
             'status' => true,
@@ -273,9 +299,8 @@ class OrderController extends Controller
     public function cancel($id)
     {
         $order = Order::findOrFail($id);
-        $authMidtrans = base64_encode(env('MIDTRANS_SERVER_KEY'));
 
-        if ($order->status === "dibatalkan" || $order->status === "refund") {
+        if ($order->status === "dibatalkan") {
             return response()->json([
                 'status' => false,
                 'message' => "terjadi kesalahan"

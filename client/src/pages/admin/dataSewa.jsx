@@ -173,29 +173,6 @@ const DataSewaPage = () => {
     } catch (error) {}
   };
 
-  const handleRefund = async (id) => {
-    try {
-      await toast.promise(
-        axiosInstance.patch(
-          `/order/refund/${id}`,
-          {},
-          {
-            headers: {
-              Authorization: `Bearer ${cookie.get("access_token_admin")}`,
-            },
-          }
-        ),
-        {
-          loading: "Saving...",
-          success: "Berhasil mengembalikan dana",
-          error: "Gagal mengembalikan dana",
-        }
-      );
-      handleCloseModal();
-      doTrigger();
-    } catch (error) {}
-  };
-
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
@@ -362,6 +339,14 @@ const DataSewaPage = () => {
                   <p className="min-w-32 text-sm font-semibold">Sewa</p>
                   <p className="text-sm">{selectedOrder?.quantity} Hari</p>
                 </div>
+                {selectedOrder?.status === "diambil" && (
+                  <div className="flex gap-1">
+                    <p className="min-w-32 text-sm font-semibold">Denda</p>
+                    <p className="text-sm">
+                      <FormatRupiah value={selectedOrder?.denda} />
+                    </p>
+                  </div>
+                )}
                 <div className="flex gap-1">
                   <p className="min-w-32 text-sm font-semibold">Total Harga</p>
                   <p className="text-sm">
@@ -391,15 +376,8 @@ const DataSewaPage = () => {
 
           {/* cancel */}
           {(selectedOrder?.status === "belum bayar" || selectedOrder?.status === "dibayar") && (
-            <Button disabled={selectedOrder?.transaction_status === "settlement"} className="bg-red-500 hover:!bg-red-600" onClick={() => handleCancel(selectedOrder?.id)}>
+            <Button className="bg-red-500 hover:!bg-red-600" onClick={() => handleCancel(selectedOrder?.id)}>
               Batalkan Pesanan
-            </Button>
-          )}
-
-          {/* refund */}
-          {selectedOrder?.status === "dibayar" && (
-            <Button /* disabled={selectedOrder?.transaction_status === "capture"} */ disabled className="bg-red-500 hover:!bg-red-600" onClick={() => handleRefund(selectedOrder?.id)}>
-              Refund Dana
             </Button>
           )}
         </Modal.Footer>

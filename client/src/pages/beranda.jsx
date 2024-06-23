@@ -1,7 +1,4 @@
-import React, { useContext, useState } from "react";
-import Button from "../components/Elements/Button/Button";
 import ButtonLink from "../components/Elements/Button/ButtonLink";
-import { Link, NavLink } from "react-router-dom";
 import Navbar from "../components/Fragments/NavBar";
 import HeroBerandaSvg from "../components/Elements/Svg/HeroBeranda";
 import CardBeranda from "../components/Fragments/Card/CardBeranda";

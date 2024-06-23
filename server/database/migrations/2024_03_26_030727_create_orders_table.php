@@ -15,7 +15,7 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('product_id');
-            $table->enum('status', ['belum bayar', 'dibayar', 'diambil', 'selesai', 'refund', 'dibatalkan'])->default('belum bayar');
+            $table->enum('status', ['belum bayar', 'dibayar', 'diambil', 'selesai', 'dibatalkan'])->default('belum bayar');
             $table->bigInteger('total_price')->nullable();
             $table->integer('quantity')->nullable();
             $table->string('token_snap')->nullable();

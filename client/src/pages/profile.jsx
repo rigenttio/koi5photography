@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import SidebarAuthLayout from "../components/Layouts/SidebarAuthLayout";
 import InputForm from "../components/Elements/Input";
 import { useRegister } from "../hooks/useRegister";
