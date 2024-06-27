@@ -11,17 +11,23 @@ import Cookies from "universal-cookie";
 import LoadingPurchase from "../components/Fragments/Loading/LoadingPurchase";
 import toast from "react-hot-toast";
 import { env } from "../lib/env";
+import { DateRange } from "react-date-range";
+import { id } from "date-fns/locale";
+import moment from "moment";
 
 const ProductPage = () => {
   const [product, setProduct] = useState();
   const { productSlug } = useParams();
-  const { handleOrder, quantity, setQuantity, total, setTotal } = useOrder();
+  const { handleOrder, quantity, dateValue, setDateValue, setQuantity, total, setTotal } = useOrder();
   const [userBookmarks, setUserBookmarks] = useState([]);
   const { isLoggedIn } = useAuth();
   const cookie = new Cookies();
   const [bookmarked, setBookmarked] = useState(false);
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
+  const { startDate, endDate } = dateValue[0];
+
+  console.log(dateValue[0].endDate);
 
   useEffect(() => {
     const getProduct = async () => {
@@ -91,6 +97,12 @@ const ProductPage = () => {
   };
 
   useEffect(() => {
+    const startMoment = moment(startDate);
+    const endMoment = moment(endDate);
+    setQuantity(endMoment.diff(startMoment, "days"));
+  }, [dateValue, product]);
+
+  useEffect(() => {
     if (quantity && product && product.price) {
       setTotal(quantity * product.price);
     }
@@ -143,34 +155,38 @@ const ProductPage = () => {
               </div>
             </div>
 
-            <div className="flex items-center mt-24">
-              <p className="min-w-[105px] text-sm text-neutral-400">Hari</p>
-              <div className="flex items-center h-7">
-                <button onClick={() => setQuantity((prev) => Math.max(prev - 1, 1))} className="bg-gray h-full w-8 flex justify-center items-center">
-                  <i className="fa-solid fa-minus"></i>
-                </button>
-                <input
-                  onInput={(event) => {
-                    const value = event.target.value.replace(/[^0-9]/g, "");
-                    setQuantity(value ? parseInt(value) : null);
+            <div className="flex flex-col gap-6 items-center mt-24">
+              <p className="min-w-[105px] text-sm text-neutral-400">Pilih Tanggal</p>
+              <div className="flex w-full justify-center">
+                <DateRange
+                  editableDateInputs={true}
+                  onChange={(item) => {
+                    const { selection } = item;
+                    const startMoment = moment(selection.startDate);
+                    const endMoment = moment(selection.endDate);
+
+                    if (endMoment.isSameOrBefore(startMoment)) {
+                      selection.endDate = startMoment.clone().add(1, "days").toDate();
+                    }
+
+                    setDateValue([selection]);
                   }}
-                  value={quantity}
-                  className="bg-gray/50 h-full w-14 text-center"
-                  type="text"
+                  moveRangeOnFirstSelection={false}
+                  ranges={dateValue}
+                  rangeColors={["#E42030"]}
+                  locale={id}
+                  minDate={new Date()}
                 />
-                <button onClick={() => setQuantity((prev) => prev + 1)} className="bg-gray h-full w-8 flex justify-center items-center">
-                  <i className="fa-solid fa-plus"></i>
-                </button>
               </div>
             </div>
 
-            <div className="flex flex-col gap-4 justify-start sm:flex-row sm:justify-between items-center mt-4">
+            <div className="flex flex-col gap-4 justify-start sm:flex-row sm:justify-between items-center mt-12">
               <div className="flex">
                 <p className="min-w-[105px] text-lg font-semibold">Total</p>
                 <p className="text-lg font-semibold">{product && <FormatRupiah value={total} />}</p>
               </div>
               <Button onClick={product && product.is_stock ? () => handleOrder(product.id) : null} disabled={product && !product.is_stock}>
-                Sewa Sekarang
+                Mulai Sewa
               </Button>
             </div>
           </div>

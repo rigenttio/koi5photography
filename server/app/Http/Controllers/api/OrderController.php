@@ -20,6 +20,8 @@ class OrderController extends Controller
         $validator = validator($request->all(), [
             'product_id' => 'required|exists:products,id',
             'quantity' => 'required',
+            'start_date' => 'required',
+            'end_date' => 'required'
         ]);
 
         if ($validator->fails()) {
@@ -46,6 +48,8 @@ class OrderController extends Controller
             'product_id' => $product->id,
             'total_price' => $totalPrice,
             'quantity' => $request->quantity,
+            'start_date' => $request->start_date,
+            'end_date' => $request->end_date,
             'exp_pay' => Carbon::now()->addHours(24)
         ]);
 
@@ -148,12 +152,12 @@ class OrderController extends Controller
 
         $order->getCollection()->transform(function ($order) {
             $now = Carbon::now();
-            $expTake = Carbon::parse($order->exp_take);
+            $expRent = Carbon::parse($order->exp_rent);
             $denda = 0;
 
-            if ($now->greaterThan($expTake)) {
-                $hoursLate = $now->diffInHours($expTake);
-                $denda = $hoursLate * ($order->total_price * 0.10);
+            if ($now->greaterThan($expRent)) {
+                $hoursLate = $now->diffInHours($expRent);
+                $denda = $hoursLate * ($order->product->price * 0.10);
             }
             $order->denda = $denda;
             return $order;
@@ -219,12 +223,12 @@ class OrderController extends Controller
 
         $orders->getCollection()->transform(function ($order) {
             $now = Carbon::now();
-            $expTake = Carbon::parse($order->exp_take);
+            $expRent = Carbon::parse($order->exp_rent);
             $denda = 0;
 
-            if ($now->greaterThan($expTake) && $order->status == "diambil") {
-                $hoursLate = $now->diffInHours($expTake);
-                $denda = $hoursLate * ($order->total_price * 0.10);
+            if ($now->greaterThan($expRent) && $order->status == "diambil") {
+                $hoursLate = $now->diffInHours($expRent);
+                $denda = $hoursLate * ($order->product->price * 0.10);
             }
             $order->denda = $denda;
             return $order;
@@ -255,9 +259,13 @@ class OrderController extends Controller
         $order = Order::findOrFail($id);
 
         if ($order->status === "dibayar") {
+            $endDate = Carbon::parse($order->end_date)->format('Y-m-d');
+            $currentTime = now()->format('H:i:s');
+
+            $expRent = Carbon::parse("$endDate $currentTime");
             $order->update([
                 'status' => "diambil",
-                'exp_rent' => Carbon::now()->addDays($order->quantity)
+                'exp_rent' => $expRent
             ]);
             $order->save();
 
@@ -317,41 +325,6 @@ class OrderController extends Controller
             'status' => true,
             'message' => "berhasil dibatalkan"
         ], 200);
-
-        // if (!$order->transaction_status) {
-        //     $order->update([
-        //         'status' => "dibatalkan",
-        //         'cancel_at' => Carbon::now()
-        //     ]);
-        //     $order->save();
-
-        //     return response()->json([
-        //         'status' => true,
-        //         'message' => "berhasil dibatalkan"
-        //     ], 200);
-        // } elseif ($order->transaction_status == "capture") {
-        //     $response = Http::withHeaders([
-        //         'Accept' => 'application/json',
-        //         'Content-Type' => 'application/json',
-        //         'Authorization' => "Basic $authMidtrans"
-        //     ])->post(env('MIDTRANS_BASE_API_URL') . "/v2/$order->id/cancel");
-        //     if ($response->successful()) {
-        //         return response()->json([
-        //             'status' => true,
-        //             'message' => "berhasil dibatalkan"
-        //         ], 200);
-        //     } else {
-        //         return response()->json([
-        //             'status' => false,
-        //             'message' => "terjadi kesalahan"
-        //         ], 500);
-        //     }
-        // } else {
-        //     return response()->json([
-        //         'status' => false,
-        //         'message' => "terjadi kesalahan"
-        //     ], 400);
-        // }
     }
 
     public function refund($id)
@@ -435,7 +408,6 @@ class OrderController extends Controller
             'status' => $status,
             'transaction_status' => $result["transaction_status"],
             'exp_pay' => ($order->status !== "belum bayar") && ($status === "belum bayar") ? $date : $order->exp_pay,
-            'exp_take' => ($order->status !== "dibayar") && ($status === "dibayar") ? $date : $order->exp_take,
             'cancel_at' => ($order->status !== "dibatalkan" || $order->status !== "refund")
                 && ($status === "dibatalkan" || $status === "refund") ? $date : $order->cancel_at,
         ]);

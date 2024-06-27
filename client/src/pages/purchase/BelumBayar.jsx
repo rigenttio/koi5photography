@@ -86,6 +86,7 @@ const BelumBayar = ({ setActiveItems }) => {
                 })
               }
               order={ord}
+              setActiveItems={setActiveItems}
             />
             {index === order.length - 1 && <div ref={listEndRef}></div>}
           </React.Fragment>

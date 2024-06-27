@@ -4,9 +4,36 @@ import Button from "../../Elements/Button/Button";
 import { FormatRupiah } from "@arismun/format-rupiah";
 import { env } from "../../../lib/env";
 import { FormatDate } from "../../../lib/FormatDate";
+import { axiosInstance } from "../../../lib/axios";
+import toast from "react-hot-toast";
+import Cookies from "universal-cookie";
 
 const CardBelumBayar = (props) => {
-  const { onClick, order } = props;
+  const { onClick, order, setActiveItems } = props;
+  const cookie = new Cookies();
+
+  const handleCancel = async (id) => {
+    try {
+      await toast.promise(
+        axiosInstance.patch(
+          `/order/cancel/${id}`,
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${cookie.get("access_token")}`,
+            },
+          }
+        ),
+        {
+          loading: "Saving...",
+          success: "Pesanan berhasil dibatalkan",
+          error: "Gagal membatalkan pesanan",
+        }
+      );
+      setActiveItems("Dibatalkan");
+    } catch (error) {}
+  };
+
   return (
     <div className="bg-gray p-6">
       <div className="flex flex-col gap-4">
@@ -42,6 +69,12 @@ const CardBelumBayar = (props) => {
               </span>
             </div>
             <div className="flex">
+              <span className="min-w-[105px] text-xs text-neutral-400">Tanggal Sewa</span>
+              <span className="text-xs">
+                <FormatDate showTime={false} value={order.start_date} /> - <FormatDate showTime={false} value={order.end_date} />
+              </span>
+            </div>
+            <div className="flex">
               <span className="min-w-[105px] text-xs text-neutral-400">Alamat Toko</span>
               <span className="text-xs">{order.product.branch.address}</span>
             </div>
@@ -53,6 +86,9 @@ const CardBelumBayar = (props) => {
                 </p>
               </div>
               <div className="flex gap-3 justify-end">
+                <button onClick={() => handleCancel(order.id)} type="button" className={`py-2 px-6 text-neutral-400 text-lg font-medium bg-[#182430] duration-300 rounded-[96px] hover:scale-105 hover:bg-dark border-2 border-neutral-400`}>
+                  Batalkan Pesanan
+                </button>
                 <Button onClick={onClick}>Bayar Sekarang</Button>
               </div>
             </div>

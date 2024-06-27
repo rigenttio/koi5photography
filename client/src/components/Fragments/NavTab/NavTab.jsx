@@ -13,14 +13,14 @@ const NavTab = () => {
     <div>
       <div className="flex lg:justify-center mt-6 overflow-x-auto">
         <NavTabItem isActive={activeItems === "Belum Bayar"} label="Belum Bayar" onClick={() => setActiveItems("Belum Bayar")} />
-        <NavTabItem isActive={activeItems === "Pengambilan Barang"} label="Pengambilan Barang" onClick={() => setActiveItems("Pengambilan Barang")} />
+        <NavTabItem isActive={activeItems === "Belum Diambil"} label="Belum Diambil" onClick={() => setActiveItems("Belum Diambil")} />
         <NavTabItem isActive={activeItems === "Pengembalian Barang"} label="Pengembalian Barang" onClick={() => setActiveItems("Pengembalian Barang")} />
         <NavTabItem isActive={activeItems === "Selesai"} label="Selesai" onClick={() => setActiveItems("Selesai")} />
         <NavTabItem isActive={activeItems === "Dibatalkan"} label="Dibatalkan" onClick={() => setActiveItems("Dibatalkan")} />
       </div>
       <div className="my-5 mx-16">
         {activeItems === "Belum Bayar" ? <BelumBayar setActiveItems={setActiveItems} /> : null}
-        {activeItems === "Pengambilan Barang" ? <PengambilanBarang /> : null}
+        {activeItems === "Belum Diambil" ? <PengambilanBarang /> : null}
         {activeItems === "Pengembalian Barang" ? <PengembalianBarang /> : null}
         {activeItems === "Selesai" ? <Selesai /> : null}
         {activeItems === "Dibatalkan" ? <Dibatalkan /> : null}

@@ -1,13 +1,13 @@
-import React from "react";
-
-export const FormatDate = ({ value }) => {
+export const FormatDate = ({ value, showTime = true }) => {
   const date = new Date(value);
   const options = {
     day: "2-digit",
     month: "short",
     year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
+    ...(showTime && {
+      hour: "2-digit",
+      minute: "2-digit",
+    }),
     hour12: false,
     // timeZone: "Asia/Jakarta",
   };

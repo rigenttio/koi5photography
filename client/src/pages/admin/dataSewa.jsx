@@ -339,10 +339,16 @@ const DataSewaPage = () => {
                   <p className="min-w-32 text-sm font-semibold">Sewa</p>
                   <p className="text-sm">{selectedOrder?.quantity} Hari</p>
                 </div>
+                <div className="flex gap-1">
+                  <p className="min-w-32 text-sm font-semibold">Tanggal Sewa</p>
+                  <p className="text-sm">
+                    <FormatDate showTime={false} value={selectedOrder?.start_date} /> - <FormatDate showTime={false} value={selectedOrder?.end_date} />
+                  </p>
+                </div>
                 {selectedOrder?.status === "diambil" && (
                   <div className="flex gap-1">
                     <p className="min-w-32 text-sm font-semibold">Denda</p>
-                    <p className="text-sm">
+                    <p className={`text-sm ${selectedOrder?.denda > 0 && "text-primary"}`}>
                       <FormatRupiah value={selectedOrder?.denda} />
                     </p>
                   </div>

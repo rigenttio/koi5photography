@@ -42,8 +42,14 @@ const CardPengembalianBarang = (props) => {
             </div>
             <div className="flex">
               <span className="min-w-[145px] text-xs text-neutral-400">Denda Keterlambatan</span>
-              <span className="text-xs">
+              <span className={`text-xs ${order.denda > 0 && "text-green-300"}`}>
                 <FormatRupiah value={order.denda} />
+              </span>
+            </div>
+            <div className="flex">
+              <span className="min-w-[145px] text-xs text-neutral-400">Tanggal Sewa</span>
+              <span className="text-xs">
+                <FormatDate showTime={false} value={order.start_date} /> - <FormatDate showTime={false} value={order.end_date} />
               </span>
             </div>
             <div className="flex">

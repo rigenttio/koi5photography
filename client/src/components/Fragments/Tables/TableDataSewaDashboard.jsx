@@ -1,6 +1,7 @@
 import { FormatRupiah } from "@arismun/format-rupiah";
 import React from "react";
 import Status from "../../Elements/Status/Status";
+import { env } from "../../../lib/env";
 
 const TableDataSewaDashboard = (props) => {
   const { orders } = props;
@@ -37,7 +38,7 @@ const TableDataSewaDashboard = (props) => {
           <div className="col-span-2 flex items-center">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
               <div className="h-12 w-12 rounded-2xl overflow-hidden">
-                <img src="/default-avatar.png" alt="Product" className="overflow-hidden" />
+                <img src={order.user.avatar ? `${env("VITE_IMAGE_BASE_URL")}/avatars/${order.user.avatar}` : "/default-avatar.png"} alt="Product" className="overflow-hidden" />
               </div>
               <p className="text-sm text-black dark:text-white">
                 {order.user.first_name} {order.user.last_name}

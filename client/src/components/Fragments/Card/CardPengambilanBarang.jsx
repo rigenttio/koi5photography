@@ -35,9 +35,9 @@ const CardPengambilanBarang = (props) => {
               <span className="text-xs">{order.id}</span>
             </div>
             <div className="flex">
-              <span className="min-w-[145px] text-xs text-neutral-400">Ambil Sebelum</span>
+              <span className="min-w-[145px] text-xs text-neutral-400">Tanggal Sewa</span>
               <span className="text-xs">
-                <FormatDate value={order.exp_take} />
+                <FormatDate showTime={false} value={order.start_date} /> - <FormatDate showTime={false} value={order.end_date} />
               </span>
             </div>
             <div className="flex">

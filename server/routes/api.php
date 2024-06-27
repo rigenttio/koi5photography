@@ -62,6 +62,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/order/take', [OrderController::class, 'getOrderTake']);
     Route::get('/order/done', [OrderController::class, 'getOrderDone']);
     Route::get('/order/cancel', [OrderController::class, 'getOrderCancel']);
+    Route::patch('/order/cancel/{id}', [OrderController::class, 'cancel']);
 
     Route::put('/user', [UserController::class, 'update']);
 
@@ -78,8 +79,6 @@ Route::middleware('auth:sanctum', 'admin')->group(function () {
     Route::get('/order', [OrderController::class, 'read']);
     Route::patch('/order/mark-take/{id}', [OrderController::class, 'markTake']);
     Route::patch('/order/mark-done/{id}', [OrderController::class, 'markDone']);
-    Route::patch('/order/cancel/{id}', [OrderController::class, 'cancel']);
-    Route::patch('/order/refund/{id}', [OrderController::class, 'refund']);
 
     Route::get('/dashboard/count', [UtilController::class, 'count']);
 

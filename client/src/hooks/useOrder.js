@@ -4,6 +4,7 @@ import { useAuth } from "../context/AuthContext";
 import { axiosInstance } from "../lib/axios";
 import toast from "react-hot-toast";
 import Cookies from "universal-cookie";
+import moment from "moment";
 
 export const useOrder = () => {
   const navigate = useNavigate();
@@ -11,14 +12,22 @@ export const useOrder = () => {
   const { isLoggedIn } = useAuth();
   const cookie = new Cookies();
 
-  const [quantity, setQuantity] = useState(1);
   const [total, setTotal] = useState(0);
+  const [quantity, setQuantity] = useState(1);
+  const [dateValue, setDateValue] = useState([
+    {
+      startDate: new Date(),
+      endDate: null,
+      key: "selection",
+    },
+  ]);
+  const { startDate, endDate } = dateValue[0];
 
   const handleOrder = async (productId) => {
     if (!isLoggedIn) {
       return navigate("/login", { state: { prevUrl: location.pathname } });
-    } else if (quantity == 0 || quantity == null) {
-      setQuantity(1);
+    } else if (!startDate || !endDate) {
+      toast.error("Silahkan pilih tanggal penyewaan");
     }
 
     try {
@@ -28,6 +37,8 @@ export const useOrder = () => {
           {
             product_id: productId,
             quantity: quantity,
+            start_date: moment(startDate).format("YYYY-MM-DD HH:mm:ss"),
+            end_date: moment(endDate).format("YYYY-MM-DD HH:mm:ss"),
           },
           {
             headers: {
@@ -47,10 +58,12 @@ export const useOrder = () => {
 
   return {
     handleOrder,
-    quantity,
-    setQuantity,
     total,
     setTotal,
     isLoggedIn,
+    dateValue,
+    setDateValue,
+    quantity,
+    setQuantity,
   };
 };

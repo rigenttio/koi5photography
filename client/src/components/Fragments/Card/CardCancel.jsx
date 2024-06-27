@@ -41,6 +41,12 @@ const CardCancel = (props) => {
               </span>
             </div>
             <div className="flex">
+              <span className="min-w-[145px] text-xs text-neutral-400">Tanggal Sewa</span>
+              <span className="text-xs">
+                <FormatDate showTime={false} value={order.start_date} /> - <FormatDate showTime={false} value={order.end_date} />
+              </span>
+            </div>
+            <div className="flex">
               <span className="min-w-[145px] text-xs text-neutral-400">Alamat Toko</span>
               <span className="text-xs">{order.product.branch.address}</span>
             </div>

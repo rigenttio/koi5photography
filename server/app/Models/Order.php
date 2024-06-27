@@ -21,6 +21,8 @@ class Order extends Model
         'exp_rent' => 'datetime:Y-m-d\TH:i:s.u\Z',
         'done_at' => 'datetime:Y-m-d\TH:i:s.u\Z',
         'cancel_at' => 'datetime:Y-m-d\TH:i:s.u\Z',
+        'start_date' => 'datetime:Y-m-d\TH:i:s.u\Z',
+        'end_date' => 'datetime:Y-m-d\TH:i:s.u\Z',
     ];
 
     public static function boot()

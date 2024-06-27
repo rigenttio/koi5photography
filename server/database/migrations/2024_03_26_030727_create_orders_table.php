@@ -20,10 +20,11 @@ return new class extends Migration
             $table->integer('quantity')->nullable();
             $table->string('token_snap')->nullable();
             $table->timestamp('exp_pay')->nullable();
-            $table->timestamp('exp_take')->nullable();
             $table->timestamp('exp_rent')->nullable();
             $table->timestamp('done_at')->nullable();
             $table->timestamp('cancel_at')->nullable();
+            $table->dateTime('start_date')->nullable();
+            $table->dateTime('end_date')->nullable();
             $table->string('transaction_status')->nullable();
             $table->timestamps();
 
