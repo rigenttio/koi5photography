@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\api\AdminAuthController;
+use App\Http\Controllers\api\AdminController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\api\AuthController;
@@ -36,11 +37,14 @@ Route::post('/forgot-password', [PasswordController::class, 'forgotPassword']);
 Route::patch('/reset-password', [PasswordController::class, 'resetPassword']);
 
 Route::get('/branch', [BranchController::class, 'read']);
+Route::get('/branches', [BranchController::class, 'getBranch']);
 Route::get('/category/{slugBranch}', [CategoryController::class, 'categoryBranch']);
 
-Route::get('/category', [CategoryController::class, 'get']);
+Route::get('/category', [CategoryController::class, 'getCategory']);
 Route::get('/categories', [CategoryController::class, 'categoryBranchId']);
 Route::get('/subcategories', [CategoryController::class, 'subcategories']);
+Route::get('/subcategory', [CategoryController::class, 'getSubCategory']);
+
 
 Route::post('/contact', [ContactController::class, 'sendContact']);
 
@@ -91,4 +95,24 @@ Route::middleware('auth:sanctum', 'admin')->group(function () {
     Route::post('/product', [ProductController::class, 'store']);
     Route::put('/product/{id}', [ProductController::class, 'update']);
     Route::delete('/product/{id}', [ProductController::class, 'destroy']);
+
+    Route::post('/category', [CategoryController::class, 'store']);
+    Route::put('/category/{id}', [CategoryController::class, 'update']);
+    Route::delete('/category/{id}', [CategoryController::class, 'destroy']);
+
+    Route::post('/subcategory', [CategoryController::class, 'storeSubCategory']);
+    Route::put('/subcategory/{id}', [CategoryController::class, 'updateSubCategory']);
+    Route::delete('/subcategory/{id}', [CategoryController::class, 'destroySubCategory']);
+
+    Route::post('/branches', [BranchController::class, 'store']);
+    Route::put('/branches/{id}', [BranchController::class, 'update']);
+    Route::delete('/branches/{id}', [BranchController::class, 'destroy']);
+
+    Route::post('/branches/{branch}/categories', [BranchController::class, 'syncBranchCategory']);
+    Route::post('/categories/{category_id}/subcategories', [CategoryController::class, 'SyncCategorySubCategory']);
+
+    Route::get('/admin', [AdminController::class, 'read']);
+    Route::post('/admin', [AdminController::class, 'store']);
+    Route::put('/admin/{id}', [AdminController::class, 'update']);
+    Route::delete('/admin/{id}', [AdminController::class, 'destroy']);
 });

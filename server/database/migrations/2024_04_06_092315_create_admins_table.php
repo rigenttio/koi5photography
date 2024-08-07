@@ -13,12 +13,13 @@ return new class extends Migration
     {
         Schema::create('admins', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger("branch_id")->nullable();
             $table->string('email')->unique();
             $table->string('password');
-            $table->string('role')->nullable();
-            $table->string('token_verify', 128)->nullable();
-            $table->rememberToken();
+            $table->enum('role', ['admin', 'super admin'])->nullable();
             $table->timestamps();
+
+            $table->foreign('branch_id')->references('id')->on('branches')->onDelete('cascade');
         });
     }
 

@@ -74,7 +74,7 @@ class AdminAuthController extends Controller
 
     public function me()
     {
-        $admin = Admin::findOrFail(auth()->id());
+        $admin = Admin::with('branch')->findOrFail(auth()->id());
 
         return response()->json([
             'status' => true,

@@ -15,8 +15,43 @@ class AdminSeeder extends Seeder
     public function run(): void
     {
         Admin::create([
-            'email' => 'admin@email.com',
-            'role' => 'administrator',
+            'branch_id' => 1,
+            'email' => 'admin.jogokaryan@email.com',
+            'role' => 'admin',
+            'password' => Hash::make('password')
+        ]);
+
+        Admin::create([
+            'branch_id' => 2,
+            'email' => 'admin.gejayan@email.com',
+            'role' => 'admin',
+            'password' => Hash::make('password')
+        ]);
+
+        Admin::create([
+            'branch_id' => 3,
+            'email' => 'admin.semarang@email.com',
+            'role' => 'admin',
+            'password' => Hash::make('password')
+        ]);
+
+        Admin::create([
+            'branch_id' => 4,
+            'email' => 'admin.purwokerto@email.com',
+            'role' => 'admin',
+            'password' => Hash::make('password')
+        ]);
+
+        Admin::create([
+            'branch_id' => 5,
+            'email' => 'admin.ungaran@email.com',
+            'role' => 'admin',
+            'password' => Hash::make('password')
+        ]);
+
+        Admin::create([
+            'email' => 'superadmin@email.com',
+            'role' => 'super admin',
             'password' => Hash::make('password')
         ]);
     }

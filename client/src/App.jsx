@@ -28,6 +28,13 @@ import LoginAdminPage from "./pages/admin/loginAdmin";
 import UsersPage from "./pages/admin/users";
 import ProductAdminPage from "./pages/admin/productAdmin";
 import AboutPage from "./pages/about";
+import CategoryPage from "./pages/admin/category";
+import SubCategoryPage from "./pages/admin/subcategory";
+import BranchAdminPage from "./pages/admin/branchAdmin";
+import BranchCategoryPage from "./pages/admin/branchCategory";
+import CategorySubCategoryPage from "./pages/admin/categorySubcategory";
+import AdminsPage from "./pages/admin/admins";
+import ProtectedRouteSuperAdmin from "./ProtectedRouteSuperAdmin";
 
 function App() {
   return (
@@ -84,6 +91,14 @@ function AdminRoutes() {
           <Route path="/data-sewa/:branchSlug" element={<DataSewaPage />} />
           <Route path="/users" element={<UsersPage />} />
           <Route path="/products" element={<ProductAdminPage />} />
+        </Route>
+        <Route element={<ProtectedRouteSuperAdmin />}>
+          <Route path="/category" element={<CategoryPage />} />
+          <Route path="/subcategory" element={<SubCategoryPage />} />
+          <Route path="/branchs" element={<BranchAdminPage />} />
+          <Route path="/branch-category" element={<BranchCategoryPage />} />
+          <Route path="/categories-subcategories" element={<CategorySubCategoryPage />} />
+          <Route path="/admins" element={<AdminsPage />} />
         </Route>
 
         <Route path="/login" element={<LoginAdminPage />} />

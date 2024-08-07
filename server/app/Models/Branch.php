@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Admin;
 use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Database\Eloquent\Model;
@@ -26,6 +27,11 @@ class Branch extends Model
     public function product(): HasMany
     {
         return $this->hasMany(Product::class, 'branch_id', 'id');
+    }
+
+    public function admins(): HasMany
+    {
+        return $this->hasMany(Admin::class, 'branch_id', 'id');
     }
 
     public function sluggable(): array

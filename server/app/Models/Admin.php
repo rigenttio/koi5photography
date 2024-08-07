@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Branch;
 use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
 use Laravel\Sanctum\NewAccessToken;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -17,7 +19,6 @@ class Admin extends Authenticatable
     protected $guarded = ['id'];
     protected $hidden = [
         'password',
-        'token_verify',
     ];
 
     public function createToken(string $name, array $abilities = ['*'])
@@ -29,5 +30,10 @@ class Admin extends Authenticatable
         ]);
 
         return new NewAccessToken($token, $token->getKey() . '|' . $plainTextToken);
+    }
+
+    public function branch(): BelongsTo
+    {
+        return $this->belongsTo(Branch::class, 'branch_id', 'id');
     }
 }

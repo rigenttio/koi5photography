@@ -1,12 +1,14 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { HiOutlineViewGrid, HiOutlineDocumentText, HiOutlineUser, HiOutlineShoppingBag } from "react-icons/hi";
+import { HiOutlineViewGrid, HiOutlineDocumentText, HiOutlineUser, HiShieldCheck, HiOutlineShoppingBag, HiViewBoards, HiViewList, HiOutlineLibrary, HiOutlineSwitchHorizontal, HiServer } from "react-icons/hi";
 import { NavLink, useLocation } from "react-router-dom";
 import SidebarLinkGroup from "./SidebarLinkGroup";
 import { AppContext } from "../../../context/AppContext";
+import { useAdminAuth } from "../../../context/AdminAuthContext";
 
 const SidebarAdmin = ({ sidebarOpen, setSidebarOpen }) => {
   const location = useLocation();
   const { pathname } = location;
+  const { authUser } = useAdminAuth();
 
   const { branchs } = useContext(AppContext);
 
@@ -86,50 +88,62 @@ const SidebarAdmin = ({ sidebarOpen, setSidebarOpen }) => {
                 </NavLink>
               </li>
 
-              <SidebarLinkGroup activeCondition={pathname.includes("data-sewa")}>
-                {(handleClick, open) => {
-                  return (
-                    <React.Fragment>
-                      <NavLink
-                        to="#"
-                        className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium duration-300 ease-in-out hover:bg-slate-500/20 ${pathname.includes("data-sewa") && "bg-slate-500/20"}`}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          sidebarExpanded ? handleClick() : setSidebarExpanded(true);
-                        }}
-                      >
-                        <HiOutlineDocumentText className="w-6 h-6" />
-                        Data Sewa
-                        <svg className={`absolute right-4 top-1/2 -translate-y-1/2 fill-current ${open && "rotate-180"}`} width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path
-                            fillRule="evenodd"
-                            clipRule="evenodd"
-                            d="M4.41107 6.9107C4.73651 6.58527 5.26414 6.58527 5.58958 6.9107L10.0003 11.3214L14.4111 6.91071C14.7365 6.58527 15.2641 6.58527 15.5896 6.91071C15.915 7.23614 15.915 7.76378 15.5896 8.08922L10.5896 13.0892C10.2641 13.4147 9.73651 13.4147 9.41107 13.0892L4.41107 8.08922C4.08563 7.76378 4.08563 7.23614 4.41107 6.9107Z"
-                            fill=""
-                          />
-                        </svg>
-                      </NavLink>
-                      {/* <!-- Dropdown Menu Start --> */}
-                      <div className={`translate transform overflow-hidden ${!open && "hidden"}`}>
-                        <ul className="mt-4 mb-5 flex flex-col gap-2.5 pl-6">
-                          {branchs &&
-                            branchs.map((branch) => (
-                              <li key={branch.id}>
-                                <NavLink
-                                  to={`/admin/data-sewa/${branch.slug}`}
-                                  className={({ isActive }) => "group relative flex items-center gap-2 rounded-md px-4 font-medium text-slate-500 duration-300 ease-in-out hover:text-white " + (isActive && "!text-white")}
-                                >
-                                  {branch.name}
-                                </NavLink>
-                              </li>
-                            ))}
-                        </ul>
-                      </div>
-                      {/* <!-- Dropdown Menu End --> */}
-                    </React.Fragment>
-                  );
-                }}
-              </SidebarLinkGroup>
+              {authUser.role == "admin" ? (
+                <li>
+                  <NavLink
+                    to={`/admin/data-sewa/${authUser.branch.slug}`}
+                    className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium duration-300 ease-in-out hover:bg-slate-500/20 ${pathname.includes("data-sewa") && "bg-slate-500/20"}`}
+                  >
+                    <HiOutlineDocumentText className="w-6 h-6" />
+                    Data Sewa
+                  </NavLink>
+                </li>
+              ) : (
+                <SidebarLinkGroup activeCondition={pathname.includes("data-sewa")}>
+                  {(handleClick, open) => {
+                    return (
+                      <React.Fragment>
+                        <NavLink
+                          to="#"
+                          className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium duration-300 ease-in-out hover:bg-slate-500/20 ${pathname.includes("data-sewa") && "bg-slate-500/20"}`}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            sidebarExpanded ? handleClick() : setSidebarExpanded(true);
+                          }}
+                        >
+                          <HiOutlineDocumentText className="w-6 h-6" />
+                          Data Sewa
+                          <svg className={`absolute right-4 top-1/2 -translate-y-1/2 fill-current ${open && "rotate-180"}`} width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                              fillRule="evenodd"
+                              clipRule="evenodd"
+                              d="M4.41107 6.9107C4.73651 6.58527 5.26414 6.58527 5.58958 6.9107L10.0003 11.3214L14.4111 6.91071C14.7365 6.58527 15.2641 6.58527 15.5896 6.91071C15.915 7.23614 15.915 7.76378 15.5896 8.08922L10.5896 13.0892C10.2641 13.4147 9.73651 13.4147 9.41107 13.0892L4.41107 8.08922C4.08563 7.76378 4.08563 7.23614 4.41107 6.9107Z"
+                              fill=""
+                            />
+                          </svg>
+                        </NavLink>
+                        {/* <!-- Dropdown Menu Start --> */}
+                        <div className={`translate transform overflow-hidden ${!open && "hidden"}`}>
+                          <ul className="mt-4 mb-5 flex flex-col gap-2.5 pl-6">
+                            {branchs &&
+                              branchs.map((branch) => (
+                                <li key={branch.id}>
+                                  <NavLink
+                                    to={`/admin/data-sewa/${branch.slug}`}
+                                    className={({ isActive }) => "group relative flex items-center gap-2 rounded-md px-4 font-medium text-slate-500 duration-300 ease-in-out hover:text-white " + (isActive && "!text-white")}
+                                  >
+                                    {branch.name}
+                                  </NavLink>
+                                </li>
+                              ))}
+                          </ul>
+                        </div>
+                        {/* <!-- Dropdown Menu End --> */}
+                      </React.Fragment>
+                    );
+                  }}
+                </SidebarLinkGroup>
+              )}
 
               <li>
                 <NavLink to="/admin/users" className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium duration-300 ease-in-out hover:bg-slate-500/20 ${pathname.includes("users") && "bg-slate-500/20"}`}>
@@ -144,6 +158,68 @@ const SidebarAdmin = ({ sidebarOpen, setSidebarOpen }) => {
                   Produk
                 </NavLink>
               </li>
+
+              {/* super admin fitur */}
+              {authUser.role === "super admin" && (
+                <>
+                  <li>
+                    <NavLink
+                      to="/admin/category"
+                      className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium duration-300 ease-in-out hover:bg-slate-500/20 ${pathname.match("/admin/category") && "bg-slate-500/20"}`}
+                    >
+                      <HiViewBoards className="w-6 h-6" />
+                      Kategori
+                    </NavLink>
+                  </li>
+
+                  <li>
+                    <NavLink
+                      to="/admin/subcategory"
+                      className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium duration-300 ease-in-out hover:bg-slate-500/20 ${pathname.includes("/admin/subcategory") && "bg-slate-500/20"}`}
+                    >
+                      <HiViewList className="w-6 h-6" />
+                      SubKategori
+                    </NavLink>
+                  </li>
+
+                  <li>
+                    <NavLink
+                      to="/admin/branchs"
+                      className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium duration-300 ease-in-out hover:bg-slate-500/20 ${pathname.match("/admin/branchs") && "bg-slate-500/20"}`}
+                    >
+                      <HiOutlineLibrary className="w-6 h-6" />
+                      Cabang
+                    </NavLink>
+                  </li>
+
+                  <li>
+                    <NavLink
+                      to="/admin/branch-category"
+                      className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium duration-300 ease-in-out hover:bg-slate-500/20 ${pathname.includes("/admin/branch-category") && "bg-slate-500/20"}`}
+                    >
+                      <HiServer className="w-6 h-6" />
+                      Cabang <HiOutlineSwitchHorizontal className="w-3 h-3" /> Kategori
+                    </NavLink>
+                  </li>
+
+                  <li>
+                    <NavLink
+                      to="/admin/categories-subcategories"
+                      className={`group relative text-sm flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium duration-300 ease-in-out hover:bg-slate-500/20 ${pathname.match("/admin/categories-subcategories") && "bg-slate-500/20"}`}
+                    >
+                      <HiServer className="w-6 h-6" />
+                      Kategori <HiOutlineSwitchHorizontal className="w-3 h-3" /> SubKategori
+                    </NavLink>
+                  </li>
+
+                  <li>
+                    <NavLink to="/admin/admins" className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium duration-300 ease-in-out hover:bg-slate-500/20 ${pathname.match("/admin/admins") && "bg-slate-500/20"}`}>
+                      <HiShieldCheck className="w-6 h-6" />
+                      Kelola Admin
+                    </NavLink>
+                  </li>
+                </>
+              )}
             </ul>
           </div>
         </nav>

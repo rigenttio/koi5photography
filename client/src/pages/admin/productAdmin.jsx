@@ -11,6 +11,7 @@ import { AppContext } from "../../context/AppContext";
 import { useProduct } from "../../hooks/useProduct";
 import { useUpdateProduct } from "../../hooks/useUpdateProduct";
 import toast from "react-hot-toast";
+import { useAdminAuth } from "../../context/AdminAuthContext";
 
 const customThemeModal = {
   root: {
@@ -73,6 +74,7 @@ const ProductAdminPage = () => {
 
   const { handleProduct } = useProduct(branch_id, category_id, subCategory_id, name, description, price, thumbnail);
   const { handleUpdateProduct } = useUpdateProduct(name, description, price, thumbnail);
+  const { authUser } = useAdminAuth();
 
   const getProducts = async (page) => {
     setIsLoading(true);
@@ -88,8 +90,24 @@ const ProductAdminPage = () => {
     } catch (error) {}
   };
 
+  const getProductbyBranch = async (page) => {
+    setIsLoading(true);
+    try {
+      const response = await axiosInstance.get(`/product/get_by_branch/${authUser.branch.slug}?page=${page}&perPage=10&search=${search}`, {
+        headers: {
+          Authorization: `Bearer ${cookie.get("access_token_admin")}`,
+        },
+      });
+      setProducts(response.data.data.data);
+      setTotalPages(response.data.data.last_page);
+      setIsLoading(false);
+    } catch (error) {}
+  };
+
   useEffect(() => {
-    getProducts(currentPage);
+    {
+      authUser.role == "admin" ? getProductbyBranch(currentPage) : getProducts(currentPage);
+    }
   }, [currentPage]);
 
   const handlePageChange = (page) => {
